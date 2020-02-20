@@ -253,6 +253,56 @@ const requireUtil = createRequireFromPath('../src/utils')
 requireUtil('./some-tool')
 ```
 
+### 5. The Environment
+Set the `NODE_PATH` environment variable to the absolute path of your application, ending with the directory you want your modules relative to (in my case `.`). 
+
+There are 2 ways of achieving the following `require()` statement from anywhere in your application:  
+```js
+const Article = require('app/models/article');
+```
+
+#### 5.1. Up-front
+Before running your `node app`, first run:
+
+Linux: `export NODE_PATH=.`  
+Windows: `set NODE_PATH=.`
+
+Setting a variable like this with `export` or `set` will remain in your environment as long as your current shell is open. To have it globally available in any shell, set it in your userprofile and reload your environment.
+
+#### 5.2. Only while executing node
+This solution will not affect your environment other than what node preceives. It does change your application start command.
+
+Start your application like this from now on:  
+Linux: `NODE_PATH=. node app`  
+Windows: `cmd.exe /C "set NODE_PATH=.&& node app"`
+
+(On Windows this command will **not** work if you put a space in between the path and the `&&`. Crazy shit.)
+
+### 6. The Start-up Script
+Effectively, this solution also uses the environment (as in 5.2), it just abstracts it away.
+
+With one of these solutions (6.1 & 6.2) you can start your application like this from now on:  
+Linux: `./app` _(also for Windows PowerShell)_  
+Windows: `app`
+
+An advantage of this solution is that if you want to force your node app to always be started with v8 parameters like `--harmony` or `--use_strict`, you can easily add them in the start-up script as well.
+
+#### 6.1. Node.js
+Example implementation: [https://gist.github.com/branneman/8775568](https://gist.github.com/branneman/8775568)
+
+#### 6.2. OS-specific start-up scripts
+Linux, create `app.sh` in your project root:  
+```sh
+#!/bin/sh
+NODE_PATH=. node app.js
+```
+Windows, create `app.bat` in your project root:  
+```bat
+@echo off
+cmd.exe /C "set NODE_PATH=.&& node app.js"
+```
+
+
 ### Conclusion
 **0. The Alias**  
 Great solution, and a well maintained and popular package on npm. The `@`-syntax also looks like something special is going on, which will tip off the next developer whats going on. You might need extra steps for this solution to work with linting and unit testing though.
@@ -269,6 +319,13 @@ Most simple solution of all. Use at your own risk.
 **4. The Wrapper**  
 Great and non-hacky solution. Very obvious what it does, especially if you pick the `require.main.require()` one.
 
+**5. The Environment**  
+Setting application-specific settings as environment variables globally or in your current shell is an anti-pattern if you ask me. E.g. it's not very handy for development machines which need to run multiple applications.
+
+If you're adding it only for the currently executing program, you're going to have to specify it each time you run your app. Your start-app command is not easy anymore, which also sucks.
+
+**6. The Start-up Script**  
+You're simplifying the command to start your app (always simply `node app`), and it gives you a nice spot to put your mandatory v8 parameters! A small disadvantage might be that you need to create a separate start-up script for your unit tests as well.
 
 <!-- CONTRIBUTING -->
 ## Contributing
