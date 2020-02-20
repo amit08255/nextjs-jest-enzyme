@@ -21,10 +21,6 @@
         "node_modules"
       ],
     "include": [
-        "server.ts",
-        "./constants/*.ts",
-        "./utilities/*.ts",
-        "./app-types/*.ts",
-        "./interfaces/*.ts"
+        "server.ts"
     ]
 }
