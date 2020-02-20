@@ -7,7 +7,6 @@ module.exports = {
     "globals": {
       "ts-jest": {
         babelConfig: true,
-        diagnostics: false,
         tsConfig: "jest.tsconfig.json"
       }
     },
@@ -16,12 +15,7 @@ module.exports = {
       "enzyme.js"
     ],
     "moduleNameMapper": {
-      "components/(.*)": "<rootDir>/components/$1",
-      "containers/(.*)": "<rootDir>/containers/$1",
-      "app-types/(.*)": "<rootDir>/app-types/$1",
-      "interfaces/(.*)": "<rootDir>/interfaces/$1",
-      "utilities/(.*)": "<rootDir>/utilities/$1",
-      "^constants/(.*)": "<rootDir>/constants/$1"
+      "components/(.*)": "<rootDir>/components/$1"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     "moduleFileExtensions": [
