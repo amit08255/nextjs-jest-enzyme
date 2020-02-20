@@ -19,6 +19,7 @@
 * [Getting Started](#getting-started)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Setting Module Alias](#setting-module-alias)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
@@ -80,6 +81,63 @@ To run test with Jest use below command -
 npm run test
 ```
 
+
+## Setting Module Alias
+
+If you wish to use module path without absolute file path such as - `../../../components/Homepage`, you need to use module alias. To setup module alias, first create a file - `next.config.js` in project root folder and add module alias like below --
+
+```js
+const path = require('path');
+//Used to set folders as alias to directly use in nextjs
+
+const nextConfiguration = {
+
+  //set nextjs config, allows you to access NodeJS env parameters with SSR
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    REACT_APP_ENV: process.env.REACT_APP_ENV,
+    NODE_ENV: process.env.NODE_ENV
+  },
+
+
+  //setting up module alias for folders - components, containers and constants
+  webpack: config => {
+    config.resolve.alias['components'] = path.join(__dirname, 'components'); //folder alias 1
+    config.resolve.alias['containers'] = path.join(__dirname, 'containers'); //folder alias 2
+    config.resolve.alias['constants'] = path.join(__dirname, 'constants'); //folder alias 3
+    return config;
+  }
+}
+
+module.exports = nextConfiguration;
+```
+
+Now setup module alias in `jest.config.js` like below --
+
+```js
+module.exports = {
+    "setupFilesAfterEnv": ["<rootDir>/setupTests.js"],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.jsx?$",
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "enzyme.js"
+    ],
+    "moduleNameMapper": {
+      "components/(.*)": "<rootDir>/components/$1",
+      "containers/(.*)": "<rootDir>/containers/$1",
+      "^constants/(.*)": "<rootDir>/constants/$1"
+    },
+    "testPathIgnorePatterns": ["<rootDir>/.next/", "<rootDir>/node_modules/"]
+  }
+```
+
+Above config specifies alias for three directories -- `components`, `containers`, and `constants` where alias for `constants` folder works only when path start with `constants`.
 
 
 <!-- CONTRIBUTING -->
