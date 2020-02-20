@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "strict": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "skipLibCheck": true,
+        "typeRoots": ["./node_modules/@types"],
+        "lib": ["dom", "es2015", "es2016"]
+    },
+    "exclude": [
+        "node_modules"
+      ],
+    "include": [
+        "server.ts",
+        "./constants/*.ts",
+        "./utilities/*.ts",
+        "./app-types/*.ts",
+        "./interfaces/*.ts"
+    ]
+}
